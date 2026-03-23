@@ -58,8 +58,7 @@ fun CartScreen(navController: NavController) {
 
             Spacer(Modifier.height(10.dp))
 
-            // Title centered
-            Row(
+             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -136,8 +135,7 @@ fun CartCard(item: CartItemData) {
 
         Column {
 
-            // Image fills card edges
-            Box {
+             Box {
 
                 Image(
                     painter = painterResource(item.image),

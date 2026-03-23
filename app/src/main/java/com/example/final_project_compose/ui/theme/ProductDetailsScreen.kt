@@ -87,8 +87,7 @@ fun ProductDetailsScreen(navController: NavController) {
                 .fillMaxSize()
         ) {
 
-            // ===== Top Bar =====
-            Row(
+             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
@@ -117,8 +116,7 @@ fun ProductDetailsScreen(navController: NavController) {
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            // ===== صورة المنتج =====
-            Box(
+             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(220.dp)
@@ -150,8 +148,7 @@ fun ProductDetailsScreen(navController: NavController) {
                 }
             }
 
-            // ===== الكارد الأبيض =====
-            Column(
+             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp))

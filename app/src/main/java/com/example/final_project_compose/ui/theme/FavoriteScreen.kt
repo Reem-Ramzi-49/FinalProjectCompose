@@ -38,8 +38,7 @@ fun FavoriteScreen(navController: NavController) {
 
     Scaffold(
         containerColor = Color(0xFFF6F6F6),
-//        bottomBar = { FavoriteBottomNavigation() }
-    ) { padding ->
+     ) { padding ->
 
         Column(
             modifier = Modifier
@@ -49,8 +48,7 @@ fun FavoriteScreen(navController: NavController) {
 
             Spacer(Modifier.height(10.dp))
 
-            // Header
-            Box(
+             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
@@ -136,7 +134,7 @@ fun FavoriteCard(imageRes: Int) {
                 Text(
                     text = "Qmele",
                     fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold   // صار بولد
+                    fontWeight = FontWeight.Bold
                 )
 
                 Spacer(Modifier.height(6.dp))
@@ -148,7 +146,7 @@ fun FavoriteCard(imageRes: Int) {
 
                     Text(
                         text = "$10.00",
-                        color = Color(0xFFB62025), // لون توتي
+                        color = Color(0xFFB62025),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -156,7 +154,7 @@ fun FavoriteCard(imageRes: Int) {
                     Text(
                         text = "50 sold",
                         fontSize = 12.sp,
-                        color = Color(0xFFBDBDBD) // أفتح شوي
+                        color = Color(0xFFBDBDBD)
                     )
                 }
             }
@@ -164,76 +162,3 @@ fun FavoriteCard(imageRes: Int) {
     }
 }
 
-//
-//@Composable
-//fun FavoriteBottomNavigation() {
-//
-//    NavigationBar(
-//        containerColor = Color(0xFFEFEFEF)
-//    ) {
-//
-//        NavigationBarItem(
-//            selected = false,
-//            onClick = {},
-//            icon = {
-//                Icon(
-//                    painter = painterResource(R.drawable.home),
-//                    contentDescription = "",
-//                    tint = Color.Gray
-//                )
-//            }
-//        )
-//
-//        NavigationBarItem(
-//            selected = false,
-//            onClick = {},
-//            icon = {
-//                Icon(
-//                    painter = painterResource(R.drawable.categories),
-//                    contentDescription = "",
-//                    tint = Color.Gray
-//                )
-//            }
-//        )
-//
-//        NavigationBarItem(
-//            selected = false,
-//            onClick = {},
-//            icon = {
-//                BadgedBox(
-//                    badge = { Badge { Text("3") } }
-//                ) {
-//                    Icon(
-//                        painter = painterResource(R.drawable.cart),
-//                        contentDescription = "",
-//                        tint = Color.Gray
-//                    )
-//                }
-//            }
-//        )
-//
-//        NavigationBarItem(
-//            selected = true,
-//            onClick = {},
-//            icon = {
-//                Icon(
-//                    painter = painterResource(R.drawable.favorite_navigation),
-//                    contentDescription = "",
-//                    tint = Color(0xFFB62025)
-//                )
-//            }
-//        )
-//
-//        NavigationBarItem(
-//            selected = false,
-//            onClick = {},
-//            icon = {
-//                Icon(
-//                    painter = painterResource(R.drawable.profile),
-//                    contentDescription = "",
-//                    tint = Color.Gray
-//                )
-//            }
-//        )
-//    }
-//}
