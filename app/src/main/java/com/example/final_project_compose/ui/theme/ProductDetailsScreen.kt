@@ -22,8 +22,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.final_project_compose.R
 
+
+
 @Composable
-fun ProductDetailsScreen(navController: NavController) {
+fun ProductDetailsScreen(navController: NavController, imageRes: Int){
 
     var quantity by remember { mutableStateOf(1) }
 
@@ -64,7 +66,18 @@ fun ProductDetailsScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(12.dp))
 
                     Button(
-                        onClick = {},
+                        onClick = {
+                            CartManager.addItem(
+                                CartItemData(
+                                    id = System.currentTimeMillis().toInt(),
+                                    title = "Device Laser Hair Rem...",
+                                    price = 10.0,
+                                    image = imageRes
+                                )
+                            )
+
+                            navController.navigate("cart_screen")
+                        },
                         modifier = Modifier
                             .weight(1f)
                             .height(55.dp),
@@ -125,7 +138,7 @@ fun ProductDetailsScreen(navController: NavController) {
             ) {
 
                 Image(
-                    painter = painterResource(R.drawable.product_details),
+                    painter = painterResource(imageRes),
                     contentDescription = null,
                     modifier = Modifier
                         .width(240.dp)

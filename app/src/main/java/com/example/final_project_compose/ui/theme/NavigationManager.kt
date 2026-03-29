@@ -64,9 +64,41 @@ fun ScreenRoutes() {
                 ProfileScreen(navigator)
             }
 
-             composable("product_details_screen") {
-                ProductDetailsScreen(navigator)
+            composable("details/{imageRes}") { backStackEntry ->
+
+                val imageRes = backStackEntry.arguments?.getString("imageRes")?.toInt() ?: 0
+
+                ProductDetailsScreen(navigator, imageRes)
             }
+
+            composable("purchases_screen") {
+                PurchasesScreen(navController = navigator)
+            }
+
+            composable("skin_screen") {
+                SkinCreamScreen(navigator)
+            }
+
+            composable("nail_screen") {
+                NailScreen(navigator)
+            }
+
+            composable("perfume_screen") {
+                PerfumeScreen(navigator)
+            }
+
+            composable("tools_screen") {
+                SkinCareToolsScreen(navigator)
+            }
+
+            composable("makeup_screen") {
+                MakeupScreen(navigator)
+            }
+
+            composable("hair_tools_screen") {
+                HairCareToolsScreen(navigator)
+            }
+
         }
     }
 }

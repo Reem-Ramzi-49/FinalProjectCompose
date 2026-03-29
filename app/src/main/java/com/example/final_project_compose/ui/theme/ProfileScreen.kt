@@ -133,8 +133,14 @@ fun ProfileScreen(navController: NavController) {
             thickness = 1.dp
         )
 
-        ProfileOption(icon = R.drawable.ic_orders, label = "My order", count = "4")
-
+        ProfileOption(
+            icon = R.drawable.ic_orders,
+            label = "My order",
+            count = "4",
+            onPress = {
+                navController.navigate("purchases_screen")
+            }
+        )
         ProfileOption(icon = R.drawable.ic_card, label = "Payment method")
 
         ProfileOption(icon = R.drawable.location, label = "Shipping address")

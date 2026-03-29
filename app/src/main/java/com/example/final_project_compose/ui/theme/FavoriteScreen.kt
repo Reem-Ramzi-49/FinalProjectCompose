@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -27,14 +28,7 @@ import com.example.final_project_compose.R
 @Composable
 fun FavoriteScreen(navController: NavController) {
 
-    val items = listOf(
-        R.drawable.product2,
-        R.drawable.product2,
-        R.drawable.product2,
-        R.drawable.product2,
-        R.drawable.product2,
-        R.drawable.product2
-    )
+    val items = FavoriteManager.favoriteItems
 
     Scaffold(
         containerColor = Color(0xFFF6F6F6),
@@ -116,11 +110,22 @@ fun FavoriteCard(imageRes: Int) {
                         .background(Color.White, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = null,
-                        tint = Color.Gray
-                    )
+                    
+                    IconButton(onClick = {
+                        FavoriteManager.toggle(imageRes)
+                    }) {
+                        Icon(
+                            imageVector = if (FavoriteManager.isFavorite(imageRes))
+                                Icons.Default.Favorite
+                            else
+                                Icons.Default.FavoriteBorder,
+                            contentDescription = null,
+                            tint = if (FavoriteManager.isFavorite(imageRes))
+                                Color.Red
+                            else
+                                Color.Gray
+                        )
+                    }
                 }
             }
 

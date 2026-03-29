@@ -2,6 +2,7 @@ package com.example.final_project_compose.ui.theme
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -22,33 +23,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.final_project_compose.R
+
+object CartManager {
+
+    val cartItems = mutableStateListOf<CartItemData>()
+
+    fun addItem(item: CartItemData) {
+        cartItems.add(item)
+    }
+
+    fun removeItem(item: CartItemData) {
+        cartItems.remove(item)
+    }
+
+}
+
+object PurchaseManager {
+    val purchasedItems = mutableStateListOf<CartItemData>()
+
+    fun addItem(item: CartItemData) {
+        purchasedItems.add(item)
+    }
+}
 
 data class CartItemData(
     val id: Int,
     val title: String,
     val price: Double,
-    val image: Int
+    val image: Int ,
+    var quantity: MutableState<Int> = mutableStateOf(1)
+
 )
 
 @Composable
 fun CartScreen(navController: NavController) {
 
-    val items = remember {
-        mutableStateListOf(
-            CartItemData(1, "Device Laser Hair Rem...", 10.0, R.drawable.product2),
-            CartItemData(2, "Device Laser Hair Rem...", 10.0, R.drawable.product2),
-            CartItemData(3, "Device Laser Hair Rem...", 10.0, R.drawable.product2),
-            CartItemData(4, "Device Laser Hair Rem...", 10.0, R.drawable.product2)
-        )
-    }
+    val items = CartManager.cartItems
 
-    val subtotal = items.sumOf { it.price }
+    val subtotal = items.sumOf { it.price * it.quantity.value }
 
     Scaffold(
         containerColor = Color(0xFFF4F4F4),
-//        bottomBar = { CartBottomNavigation() }
-    ) { padding ->
+     ) { padding ->
 
         Column(
             modifier = Modifier
@@ -86,8 +102,7 @@ fun CartScreen(navController: NavController) {
                 modifier = Modifier.weight(1f)
             ) {
                 items(items, key = { it.id }) { item ->
-                    CartCard(item)
-                }
+                    CartCard(item, navController)                }
             }
 
             Divider()
@@ -105,8 +120,11 @@ fun CartScreen(navController: NavController) {
             Spacer(Modifier.height(16.dp))
 
             Button(
-                onClick = {
-                    navController.navigate("product_details_screen")                },
+                onClick = {   PurchaseManager.purchasedItems.addAll(CartManager.cartItems)
+
+                     CartManager.cartItems.clear()
+
+                     navController.navigate("purchases_screen") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp),
@@ -124,9 +142,10 @@ fun CartScreen(navController: NavController) {
 }
 
 @Composable
-fun CartCard(item: CartItemData) {
+fun CartCard(item: CartItemData, navController: NavController) {
 
-    var quantity by remember { mutableStateOf(1) }
+    var showDialog by remember { mutableStateOf(false) }
+    val quantity = item.quantity
 
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -135,7 +154,7 @@ fun CartCard(item: CartItemData) {
 
         Column {
 
-             Box {
+            Box {
 
                 Image(
                     painter = painterResource(item.image),
@@ -155,12 +174,16 @@ fun CartCard(item: CartItemData) {
                         .background(Color.White, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        Icons.Default.Close,
-                        contentDescription = null,
-                        tint = Color.Red,
-                        modifier = Modifier.size(16.dp)
-                    )
+                    IconButton(onClick = {
+                        CartManager.removeItem(item)
+                    }) {
+                        Icon(
+                            Icons.Default.Close,
+                            contentDescription = null,
+                            tint = Color.Red,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
                 }
             }
 
@@ -176,27 +199,31 @@ fun CartCard(item: CartItemData) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
 
-                    Text(
-                        "$${"%.2f".format(item.price)}",
+                     Text(
+                        "$${"%.2f".format(item.price * quantity.value)}",
                         color = Color.Red,
                         fontSize = 14.sp
                     )
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
 
-                        Box(
+                         Box(
                             modifier = Modifier
                                 .size(26.dp)
                                 .background(Color(0xFFD9A6A6), CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             IconButton(
-                                onClick = { if (quantity > 1) quantity-- },
+                                onClick = {
+                                    if (quantity.value > 1) {
+                                        quantity.value--
+                                    }
+                                },
                                 modifier = Modifier.size(26.dp)
                             ) {
                                 Icon(
                                     Icons.Default.Remove,
-                                    null,
+                                    contentDescription = null,
                                     tint = Color.White,
                                     modifier = Modifier.size(14.dp)
                                 )
@@ -205,26 +232,28 @@ fun CartCard(item: CartItemData) {
 
                         Spacer(Modifier.width(4.dp))
 
-                        Text(
-                            quantity.toString(),
+                         Text(
+                            quantity.value.toString(),
                             fontSize = 13.sp
                         )
 
                         Spacer(Modifier.width(4.dp))
 
-                        Box(
+                         Box(
                             modifier = Modifier
                                 .size(26.dp)
                                 .background(Color(0xFFB62025), CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             IconButton(
-                                onClick = { quantity++ },
+                                onClick = {
+                                    quantity.value++
+                                },
                                 modifier = Modifier.size(26.dp)
                             ) {
                                 Icon(
                                     Icons.Default.Add,
-                                    null,
+                                    contentDescription = null,
                                     tint = Color.White,
                                     modifier = Modifier.size(14.dp)
                                 )
@@ -243,7 +272,10 @@ fun CartCard(item: CartItemData) {
                     Text(
                         "Buy now",
                         color = Color(0xFFB62025),
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        modifier = Modifier.clickable {
+                            showDialog = true
+                        }
                     )
 
                     Icon(
@@ -255,5 +287,25 @@ fun CartCard(item: CartItemData) {
                 }
             }
         }
+    }
+
+     if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Success") },
+            text = { Text("Purchase successful") },
+            confirmButton = {
+                Button(onClick = {
+                    showDialog = false
+
+                    PurchaseManager.addItem(item)
+                    CartManager.removeItem(item)
+
+                    navController.navigate("purchases_screen")
+                }) {
+                    Text("OK")
+                }
+            }
+        )
     }
 }

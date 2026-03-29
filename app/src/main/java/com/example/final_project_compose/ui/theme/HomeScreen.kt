@@ -2,14 +2,21 @@ package com.example.final_project_compose.ui.theme
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -21,6 +28,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.final_project_compose.R
+
+object FavoriteManager {
+
+    val favoriteItems = mutableStateListOf<Int>()
+
+    fun toggle(item: Int) {
+        if (favoriteItems.contains(item)) {
+            favoriteItems.remove(item)
+        } else {
+            favoriteItems.add(item)
+        }
+    }
+
+    fun isFavorite(item: Int): Boolean {
+        return favoriteItems.contains(item)
+    }
+}
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -39,8 +63,7 @@ fun HomeScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            ItemsGrid()
-        }
+            ItemsGrid(navController)        }
     }
 }
 
@@ -140,7 +163,7 @@ fun PromotionBanner() {
 }
 
 @Composable
-fun ItemsGrid() {
+fun ItemsGrid(navController: NavController)  {
 
     val items = listOf(
         R.drawable.product1,
@@ -167,16 +190,18 @@ fun ItemsGrid() {
                     else -> ""
                 }
 
-            ItemCard(items[index], label)
-        }
+            ItemCard(items[index], label, navController)        }
     }
 }
 
 @Composable
-fun ItemCard(imageRes: Int, badgeText: String) {
-
+fun ItemCard(imageRes: Int, badgeText: String, navController: NavController) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                navController.navigate("details/$imageRes")
+            },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
@@ -218,12 +243,21 @@ fun ItemCard(imageRes: Int, badgeText: String) {
                         .background(Color.White, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "",
-                        tint = Color.Gray
-                    )
+                    IconButton(onClick = {
+                        FavoriteManager.toggle(imageRes)
+                    }) {
+                        Icon(
+                            imageVector = if (FavoriteManager.isFavorite(imageRes))
+                                Icons.Default.Favorite
+                            else
+                                Icons.Default.FavoriteBorder,
+                            contentDescription = "",
+                            tint = if (FavoriteManager.isFavorite(imageRes))
+                                Color.Red
+                            else
+                                Color.Gray
+                        )
+                    }
                 }
             }
 

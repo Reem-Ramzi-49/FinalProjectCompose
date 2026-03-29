@@ -2,6 +2,7 @@ package com.example.final_project_compose.ui.theme
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,8 +39,7 @@ fun CategoriesPage(navController: NavController) {
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            CategoryListGrid()
-        }
+            CategoryListGrid(navController)        }
     }
 }
 
@@ -76,7 +76,7 @@ data class CategoryModel(
 )
 
 @Composable
-fun CategoryListGrid() {
+fun CategoryListGrid(navController: NavController) {
 
     val data = listOf(
         CategoryModel("Skin creams", R.drawable.skin_cream_items),
@@ -99,18 +99,47 @@ fun CategoryListGrid() {
     ) {
 
         items(data) { item ->
-            CategoryTile(item)
-        }
+            CategoryTile(item, navController)        }
     }
 }
 
 @Composable
-fun CategoryTile(model: CategoryModel) {
+fun CategoryTile(model: CategoryModel, navController: NavController) {
 
     Box(
         modifier = Modifier
             .height(158.dp)
             .clip(RoundedCornerShape(15.dp))
+            .clickable {
+                when (model.name) {
+
+                    "Skin creams" -> {
+                        navController.navigate("skin_screen")
+                    }
+
+                    "Nail products" -> {
+                        navController.navigate("nail_screen")
+                    }
+
+                    "Perfume" -> {
+                        navController.navigate("perfume_screen")
+                    }
+
+                    "Skin care Tools" -> {
+                        navController.navigate("tools_screen")
+                    }
+
+                    "Makeup" -> {
+                        navController.navigate("makeup_screen")
+                    }
+
+                    "Hair care tools" -> {
+                        navController.navigate("hair_tools_screen")
+                    }
+
+                }
+            }
+
     ) {
 
         Image(

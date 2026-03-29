@@ -28,6 +28,7 @@ import com.example.final_project_compose.R
 fun LoginScreen(navController: NavController) {
 
     var mobileInput by remember { mutableStateOf("") }
+    var isError by remember { mutableStateOf(false) }
 
     val titleText = "Your Phone Number"
     val emailLogin = "Sign in with Email"
@@ -61,6 +62,14 @@ fun LoginScreen(navController: NavController) {
                 onValueChange = { mobileInput = it }
             )
 
+            if (isError) {
+                Text(
+                    text = "Please enter phone number",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
+
             Spacer(modifier = Modifier.height(11.dp))
 
             Text(
@@ -74,7 +83,13 @@ fun LoginScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(18.dp))
 
             LoginBtn(loginButton) {
-                navController.navigate("home_screen")            }
+                if (mobileInput.length >= 10) {
+                    isError = false
+                    navController.navigate("home_screen")
+                } else {
+                    isError = true
+                }
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
